@@ -165,6 +165,8 @@ set(${PROJECT_NAME}_source_files
     dynamic-types/DynamicDataHelper.cpp
 
     fastdds/xtypes/type_representation/TypeObject.cxx
+    fastdds/xtypes/type_representation/TypeObjectBuilder.cpp
+    fastdds/xtypes/type_representation/TypeObjectRegistry.cpp
 
     fastrtps_deprecated/attributes/TopicAttributes.cpp
     fastdds/core/Entity.cpp
