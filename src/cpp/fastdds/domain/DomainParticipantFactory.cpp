@@ -57,7 +57,6 @@ DomainParticipantFactory::DomainParticipantFactory()
     , rtps_domain_(fastrtps::rtps::RTPSDomainImpl::get_instance())
     , log_resources_(detail::get_log_resources())
 {
-    type_object_registry_ = std::make_shared<xtypes1_3::TypeObjectRegistry>();
 }
 
 DomainParticipantFactory::~DomainParticipantFactory()
@@ -405,7 +404,7 @@ ReturnCode_t DomainParticipantFactory::set_qos(
     return ReturnCode_t::RETCODE_OK;
 }
 
-std::shared_ptr<xtypes1_3::TypeObjectRegistry> DomainParticipantFactory::type_object_registry()
+xtypes1_3::TypeObjectRegistry& DomainParticipantFactory::type_object_registry()
 {
     return type_object_registry_;
 }
