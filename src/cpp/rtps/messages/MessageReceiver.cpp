@@ -68,7 +68,8 @@ MessageReceiver::MessageReceiver(
             &MessageReceiver::process_data_message_with_security,
             this,
             std::placeholders::_1,
-            std::placeholders::_2);
+            std::placeholders::_2,
+            std::placeholders::_3);
 
         process_data_fragment_message_function_ = std::bind(
             &MessageReceiver::process_data_fragment_message_with_security,
@@ -77,7 +78,8 @@ MessageReceiver::MessageReceiver(
             std::placeholders::_2,
             std::placeholders::_3,
             std::placeholders::_4,
-            std::placeholders::_5);
+            std::placeholders::_5,
+            std::placeholders::_6);
     }
     else
     {
@@ -86,7 +88,8 @@ MessageReceiver::MessageReceiver(
         &MessageReceiver::process_data_message_without_security,
         this,
         std::placeholders::_1,
-        std::placeholders::_2);
+        std::placeholders::_2,
+        std::placeholders::_3);
 
     process_data_fragment_message_function_ = std::bind(
         &MessageReceiver::process_data_fragment_message_without_security,
@@ -95,7 +98,8 @@ MessageReceiver::MessageReceiver(
         std::placeholders::_2,
         std::placeholders::_3,
         std::placeholders::_4,
-        std::placeholders::_5);
+        std::placeholders::_5,
+        std::placeholders::_6);
 #if HAVE_SECURITY
 }
 
@@ -112,7 +116,8 @@ MessageReceiver::~MessageReceiver()
  #if HAVE_SECURITY
 void MessageReceiver::process_data_message_with_security(
         const EntityId_t& reader_id,
-        CacheChange_t& change)
+        CacheChange_t& change,
+        bool current_message_was_decoded)
 {
     auto process_message = [&change, this](RTPSReader* reader)
             {
@@ -157,7 +162,8 @@ void MessageReceiver::process_data_fragment_message_with_security(
         CacheChange_t& change,
         uint32_t sample_size,
         uint32_t fragment_starting_num,
-        uint16_t fragments_in_submessage)
+        uint16_t fragments_in_submessage,
+        bool current_message_was_decoded)
 {
     auto process_message =
             [&change, sample_size, fragment_starting_num, fragments_in_submessage, this](RTPSReader* reader)
@@ -193,7 +199,8 @@ void MessageReceiver::process_data_fragment_message_with_security(
 
 void MessageReceiver::process_data_message_without_security(
         const EntityId_t& reader_id,
-        CacheChange_t& change)
+        CacheChange_t& change,
+        bool /*current_message_was_decoded*/)
 {
     auto process_message = [&change](RTPSReader* reader)
             {
@@ -208,7 +215,8 @@ void MessageReceiver::process_data_fragment_message_without_security(
         CacheChange_t& change,
         uint32_t sample_size,
         uint32_t fragment_starting_num,
-        uint16_t fragments_in_submessage)
+        uint16_t fragments_in_submessage,
+        bool /*current_message_was_decoded*/)
 {
     auto process_message = [&change, sample_size, fragment_starting_num, fragments_in_submessage](RTPSReader* reader)
             {
@@ -842,7 +850,7 @@ bool MessageReceiver::proc_Submsg_Data(
             associated_readers_.size());
 
     //Look for the correct reader to add the change
-    process_data_message_function_(readerID, ch);
+    process_data_message_function_(readerID, ch, current_message_was_decoded);
 
     IPayloadPool* payload_pool = ch.payload_owner();
     if (payload_pool)
@@ -1025,7 +1033,8 @@ bool MessageReceiver::proc_Submsg_DataFrag(
 
     logInfo(RTPS_MSG_IN, IDSTRING "from Writer " << ch.writerGUID << "; possible RTPSReader entities: " <<
             associated_readers_.size());
-    process_data_fragment_message_function_(readerID, ch, sampleSize, fragmentStartingNum, fragmentsInSubmessage);
+    process_data_fragment_message_function_(readerID, ch, sampleSize, fragmentStartingNum, fragmentsInSubmessage,
+            current_message_was_decoded);
     ch.serializedPayload.data = nullptr;
     ch.inline_qos.data = nullptr;
 
