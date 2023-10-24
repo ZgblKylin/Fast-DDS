@@ -117,10 +117,15 @@ MessageReceiver::~MessageReceiver()
 void MessageReceiver::process_data_message_with_security(
         const EntityId_t& reader_id,
         CacheChange_t& change,
-        bool current_message_was_decoded)
+        bool was_decoded)
 {
-    auto process_message = [&change, this](RTPSReader* reader)
+    auto process_message = [was_decoded, &change, this](RTPSReader* reader)
             {
+                if (!was_decoded && reader->getAttributes().security_attributes().is_submessage_protected)
+                {
+                    return;
+                }
+
                 if (!reader->getAttributes().security_attributes().is_payload_protected)
                 {
                     reader->processDataMsg(&change);
@@ -163,11 +168,16 @@ void MessageReceiver::process_data_fragment_message_with_security(
         uint32_t sample_size,
         uint32_t fragment_starting_num,
         uint16_t fragments_in_submessage,
-        bool current_message_was_decoded)
+        bool was_decoded)
 {
-    auto process_message =
-            [&change, sample_size, fragment_starting_num, fragments_in_submessage, this](RTPSReader* reader)
+    auto process_message = [was_decoded, &change, sample_size, fragment_starting_num, fragments_in_submessage, this](
+        RTPSReader* reader)
             {
+                if (!was_decoded && reader->getAttributes().security_attributes().is_submessage_protected)
+                {
+                    return;
+                }
+
                 if (!reader->getAttributes().security_attributes().is_payload_protected)
                 {
                     reader->processDataFragMsg(&change, sample_size, fragment_starting_num, fragments_in_submessage);
@@ -200,7 +210,7 @@ void MessageReceiver::process_data_fragment_message_with_security(
 void MessageReceiver::process_data_message_without_security(
         const EntityId_t& reader_id,
         CacheChange_t& change,
-        bool /*current_message_was_decoded*/)
+        bool /*was_decoded*/)
 {
     auto process_message = [&change](RTPSReader* reader)
             {
@@ -216,7 +226,7 @@ void MessageReceiver::process_data_fragment_message_without_security(
         uint32_t sample_size,
         uint32_t fragment_starting_num,
         uint16_t fragments_in_submessage,
-        bool /*current_message_was_decoded*/)
+        bool /*was_decoded*/)
 {
     auto process_message = [&change, sample_size, fragment_starting_num, fragments_in_submessage](RTPSReader* reader)
             {
