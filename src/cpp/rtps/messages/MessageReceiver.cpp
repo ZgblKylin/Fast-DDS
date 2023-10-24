@@ -1144,6 +1144,8 @@ bool MessageReceiver::proc_Submsg_Heartbeat(
     findAllReaders(readerGUID.entityId,
             [was_decoded, &writerGUID, &HBCount, &firstSN, &lastSN, finalFlag, livelinessFlag](RTPSReader* reader)
             {
+                // Only used when HAVE_SECURITY is defined
+                static_cast<void>(was_decoded);
 #if HAVE_SECURITY
                 if (was_decoded || !reader->getAttributes().security_attributes().is_submessage_protected)
 #endif  // HAVE_SECURITY
@@ -1160,6 +1162,9 @@ bool MessageReceiver::proc_Submsg_Acknack(
         SubmessageHeader_t* smh,
         bool was_decoded) const
 {
+    // Only used when HAVE_SECURITY is defined
+    static_cast<void>(was_decoded);
+
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
     bool endiannessFlag = (smh->flags & BIT(0)) != 0;
@@ -1246,6 +1251,8 @@ bool MessageReceiver::proc_Submsg_Gap(
     findAllReaders(readerGUID.entityId,
             [was_decoded, &writerGUID, &gapStart, &gapList](RTPSReader* reader)
             {
+                // Only used when HAVE_SECURITY is defined
+                static_cast<void>(was_decoded);
 #if HAVE_SECURITY
                 if (was_decoded || !reader->getAttributes().security_attributes().is_submessage_protected)
 #endif  // HAVE_SECURITY
@@ -1350,6 +1357,9 @@ bool MessageReceiver::proc_Submsg_NackFrag(
         SubmessageHeader_t* smh,
         bool was_decoded) const
 {
+    // Only used when HAVE_SECURITY is defined
+    static_cast<void>(was_decoded);
+
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
     bool endiannessFlag = (smh->flags & BIT(0)) != 0;
