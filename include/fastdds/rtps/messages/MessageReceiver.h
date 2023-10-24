@@ -103,14 +103,16 @@ private:
     //! Function used to process a received message
     std::function<void(
                 const EntityId_t&,
-                CacheChange_t&)> process_data_message_function_;
+                CacheChange_t&,
+                bool)> process_data_message_function_;
     //! Function used to process a received fragment message
     std::function<void(
                 const EntityId_t&,
                 CacheChange_t&,
                 uint32_t,
                 uint32_t,
-                uint16_t)> process_data_fragment_message_function_;
+                uint16_t,
+                bool)> process_data_fragment_message_function_;
 
     //!Reset the MessageReceiver to process a new message.
     void reset();
@@ -216,19 +218,22 @@ private:
     /**
      * @name Variants of received data message processing functions.
      *
-     * @param[in] reader_id The ID of the reader to which the changes is addressed
-     * @param[in] change    The CacheChange with the received data to process
+     * @param[in] reader_id    The ID of the reader to which the changes is addressed
+     * @param[in] change       The CacheChange with the received data to process
+     * @param[in] was_decoded  Whether the submessage being processed came from decoding a secured submessage
      */
     ///@{
  #if HAVE_SECURITY
     void process_data_message_with_security(
             const EntityId_t& reader_id,
-            CacheChange_t& change);
+            CacheChange_t& change,
+            bool was_decoded);
 #endif // HAVE_SECURITY
 
     void process_data_message_without_security(
             const EntityId_t& reader_id,
-            CacheChange_t& change);
+            CacheChange_t& change,
+            bool was_decoded);
     ///@}
 
     /**
@@ -240,6 +245,8 @@ private:
      * @param[in] sample_size             The size of the message
      * @param[in] fragment_starting_num   The index of the first fragment in the message
      * @param[in] fragments_in_submessage The number of fragments in the message
+     * @param[in] was_decoded             Whether the submessage being processed came from decoding a secured
+     *                                    submessage
      */
     ///@{
  #if HAVE_SECURITY
@@ -248,7 +255,8 @@ private:
             CacheChange_t& change,
             uint32_t sample_size,
             uint32_t fragment_starting_num,
-            uint16_t fragments_in_submessage);
+            uint16_t fragments_in_submessage,
+            bool was_decoded);
 #endif // HAVE_SECURITY
 
     void process_data_fragment_message_without_security(
@@ -256,7 +264,8 @@ private:
             CacheChange_t& change,
             uint32_t sample_size,
             uint32_t fragment_starting_num,
-            uint16_t fragments_in_submessage);
+            uint16_t fragments_in_submessage,
+            bool was_decoded);
     ///@}
 
     /**
