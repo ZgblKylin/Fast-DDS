@@ -1142,9 +1142,14 @@ bool MessageReceiver::proc_Submsg_Heartbeat(
 
     //Look for the correct reader and writers:
     findAllReaders(readerGUID.entityId,
-            [&writerGUID, &HBCount, &firstSN, &lastSN, finalFlag, livelinessFlag](RTPSReader* reader)
+            [was_decoded, &writerGUID, &HBCount, &firstSN, &lastSN, finalFlag, livelinessFlag](RTPSReader* reader)
             {
-                reader->processHeartbeatMsg(writerGUID, HBCount, firstSN, lastSN, finalFlag, livelinessFlag);
+#if HAVE_SECURITY
+                if (was_decoded || !reader->getAttributes().security_attributes().is_submessage_protected)
+#endif  // HAVE_SECURITY
+                {
+                    reader->processHeartbeatMsg(writerGUID, HBCount, firstSN, lastSN, finalFlag, livelinessFlag);
+                }
             });
 
     return true;
@@ -1186,14 +1191,19 @@ bool MessageReceiver::proc_Submsg_Acknack(
     //Look for the correct writer to use the acknack
     for (RTPSWriter* it : associated_writers_)
     {
-        bool result;
-        if (it->process_acknack(writerGUID, readerGUID, Ackcount, SNSet, finalFlag, result))
+#if HAVE_SECURITY
+        if (was_decoded || !it->getAttributes().security_attributes().is_submessage_protected)
+#endif  // HAVE_SECURITY
         {
-            if (!result)
+            bool result;
+            if (it->process_acknack(writerGUID, readerGUID, Ackcount, SNSet, finalFlag, result))
             {
-                EPROSIMA_LOG_INFO(RTPS_MSG_IN, IDSTRING "Acknack msg to NOT stateful writer ");
+                if (!result)
+                {
+                    EPROSIMA_LOG_INFO(RTPS_MSG_IN, IDSTRING "Acknack msg to NOT stateful writer ");
+                }
+                return result;
             }
-            return result;
         }
     }
     EPROSIMA_LOG_INFO(RTPS_MSG_IN, IDSTRING "Acknack msg to UNKNOWN writer (I looked through "
@@ -1234,9 +1244,14 @@ bool MessageReceiver::proc_Submsg_Gap(
     }
 
     findAllReaders(readerGUID.entityId,
-            [&writerGUID, &gapStart, &gapList](RTPSReader* reader)
+            [was_decoded, &writerGUID, &gapStart, &gapList](RTPSReader* reader)
             {
-                reader->processGapMsg(writerGUID, gapStart, gapList);
+#if HAVE_SECURITY
+                if (was_decoded || !reader->getAttributes().security_attributes().is_submessage_protected)
+#endif  // HAVE_SECURITY
+                {
+                    reader->processGapMsg(writerGUID, gapStart, gapList);
+                }
             });
 
     return true;
@@ -1371,14 +1386,19 @@ bool MessageReceiver::proc_Submsg_NackFrag(
     //Look for the correct writer to use the acknack
     for (RTPSWriter* it : associated_writers_)
     {
-        bool result;
-        if (it->process_nack_frag(writerGUID, readerGUID, Ackcount, writerSN, fnState, result))
+#if HAVE_SECURITY
+        if (was_decoded || !it->getAttributes().security_attributes().is_submessage_protected)
+#endif  // HAVE_SECURITY
         {
-            if (!result)
+            bool result;
+            if (it->process_nack_frag(writerGUID, readerGUID, Ackcount, writerSN, fnState, result))
             {
-                EPROSIMA_LOG_INFO(RTPS_MSG_IN, IDSTRING "Acknack msg to NOT stateful writer ");
+                if (!result)
+                {
+                    EPROSIMA_LOG_INFO(RTPS_MSG_IN, IDSTRING "Acknack msg to NOT stateful writer ");
+                }
+                return result;
             }
-            return result;
         }
     }
     EPROSIMA_LOG_INFO(RTPS_MSG_IN, IDSTRING "Acknack msg to UNKNOWN writer (I looked through "
@@ -1389,7 +1409,7 @@ bool MessageReceiver::proc_Submsg_NackFrag(
 bool MessageReceiver::proc_Submsg_HeartbeatFrag(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool was_decoded) const
+        bool /*was_decoded*/) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
