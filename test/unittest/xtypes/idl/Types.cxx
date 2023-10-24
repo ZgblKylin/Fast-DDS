@@ -29,13 +29,14 @@ char dummy;
 #include "Types.h"
 #include "TypesTypeObject.h"
 
-#include <fastcdr/Cdr.h>
-
-
-#include <fastcdr/exceptions/BadParamException.h>
-using namespace eprosima::fastcdr::exception;
+#include <fastdds/rtps/common/CdrSerialization.hpp>
 
 #include <utility>
+
+// Include auxiliary functions like for serializing/deserializing.
+#include "TypesCdrAux.ipp"
+
+using namespace eprosima::fastcdr::exception;
 
 
 MyEnumStruct::MyEnumStruct()
@@ -66,7 +67,6 @@ MyEnumStruct& MyEnumStruct::operator =(
 {
 
     m_my_enum = x.m_my_enum;
-
     return *this;
 }
 
@@ -75,7 +75,6 @@ MyEnumStruct& MyEnumStruct::operator =(
 {
 
     m_my_enum = x.m_my_enum;
-
     return *this;
 }
 
@@ -90,6 +89,19 @@ bool MyEnumStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MyEnumStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MyEnumStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_enum
@@ -148,7 +160,6 @@ MyBadEnumStruct& MyBadEnumStruct::operator =(
 {
 
     m_my_enum = x.m_my_enum;
-
     return *this;
 }
 
@@ -157,7 +168,6 @@ MyBadEnumStruct& MyBadEnumStruct::operator =(
 {
 
     m_my_enum = x.m_my_enum;
-
     return *this;
 }
 
@@ -172,6 +182,19 @@ bool MyBadEnumStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MyBadEnumStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MyBadEnumStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_enum
@@ -231,7 +254,6 @@ MyAliasEnumStruct& MyAliasEnumStruct::operator =(
 {
 
     m_my_enum = x.m_my_enum;
-
     return *this;
 }
 
@@ -240,7 +262,6 @@ MyAliasEnumStruct& MyAliasEnumStruct::operator =(
 {
 
     m_my_enum = x.m_my_enum;
-
     return *this;
 }
 
@@ -255,6 +276,19 @@ bool MyAliasEnumStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MyAliasEnumStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MyAliasEnumStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_enum
@@ -319,7 +353,6 @@ BasicStruct& BasicStruct::operator =(
     m_my_bool = x.m_my_bool;
     m_my_int32 = x.m_my_int32;
     m_my_string = x.m_my_string;
-
     return *this;
 }
 
@@ -330,7 +363,6 @@ BasicStruct& BasicStruct::operator =(
     m_my_bool = x.m_my_bool;
     m_my_int32 = x.m_my_int32;
     m_my_string = std::move(x.m_my_string);
-
     return *this;
 }
 
@@ -347,6 +379,19 @@ bool BasicStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void BasicStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void BasicStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_bool
@@ -479,7 +524,6 @@ BasicNamesStruct& BasicNamesStruct::operator =(
     m_my_bool_name = x.m_my_bool_name;
     m_my_int32_name = x.m_my_int32_name;
     m_my_string_name = x.m_my_string_name;
-
     return *this;
 }
 
@@ -490,7 +534,6 @@ BasicNamesStruct& BasicNamesStruct::operator =(
     m_my_bool_name = x.m_my_bool_name;
     m_my_int32_name = x.m_my_int32_name;
     m_my_string_name = std::move(x.m_my_string_name);
-
     return *this;
 }
 
@@ -507,6 +550,19 @@ bool BasicNamesStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void BasicNamesStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void BasicNamesStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_bool_name
@@ -639,7 +695,6 @@ BasicBadStruct& BasicBadStruct::operator =(
     m_my_bool = x.m_my_bool;
     m_my_int32 = x.m_my_int32;
     m_my_string = x.m_my_string;
-
     return *this;
 }
 
@@ -650,7 +705,6 @@ BasicBadStruct& BasicBadStruct::operator =(
     m_my_bool = x.m_my_bool;
     m_my_int32 = x.m_my_int32;
     m_my_string = std::move(x.m_my_string);
-
     return *this;
 }
 
@@ -667,6 +721,19 @@ bool BasicBadStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void BasicBadStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void BasicBadStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_bool
@@ -805,7 +872,6 @@ BasicWideStruct& BasicWideStruct::operator =(
     m_my_string = x.m_my_string;
     m_new_int32 = x.m_new_int32;
     m_new_string = x.m_new_string;
-
     return *this;
 }
 
@@ -818,7 +884,6 @@ BasicWideStruct& BasicWideStruct::operator =(
     m_my_string = std::move(x.m_my_string);
     m_new_int32 = x.m_new_int32;
     m_new_string = std::move(x.m_new_string);
-
     return *this;
 }
 
@@ -837,6 +902,19 @@ bool BasicWideStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void BasicWideStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void BasicWideStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member my_bool
@@ -1043,7 +1121,6 @@ BadBasicWideStruct& BadBasicWideStruct::operator =(
     m_my_bool = x.m_my_bool;
     m_my_int32 = x.m_my_int32;
     m_my_string = x.m_my_string;
-
     return *this;
 }
 
@@ -1056,7 +1133,6 @@ BadBasicWideStruct& BadBasicWideStruct::operator =(
     m_my_bool = x.m_my_bool;
     m_my_int32 = x.m_my_int32;
     m_my_string = std::move(x.m_my_string);
-
     return *this;
 }
 
@@ -1075,6 +1151,19 @@ bool BadBasicWideStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void BadBasicWideStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void BadBasicWideStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member new_int32
@@ -1269,7 +1358,6 @@ StringStruct& StringStruct::operator =(
 {
 
     m_my_string = x.m_my_string;
-
     return *this;
 }
 
@@ -1278,7 +1366,6 @@ StringStruct& StringStruct::operator =(
 {
 
     m_my_string = std::move(x.m_my_string);
-
     return *this;
 }
 
@@ -1293,6 +1380,19 @@ bool StringStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void StringStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void StringStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_string
@@ -1361,7 +1461,6 @@ LargeStringStruct& LargeStringStruct::operator =(
 {
 
     m_my_large_string = x.m_my_large_string;
-
     return *this;
 }
 
@@ -1370,7 +1469,6 @@ LargeStringStruct& LargeStringStruct::operator =(
 {
 
     m_my_large_string = std::move(x.m_my_large_string);
-
     return *this;
 }
 
@@ -1385,6 +1483,19 @@ bool LargeStringStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void LargeStringStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void LargeStringStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_large_string
@@ -1453,7 +1564,6 @@ WStringStruct& WStringStruct::operator =(
 {
 
     m_my_wstring = x.m_my_wstring;
-
     return *this;
 }
 
@@ -1462,7 +1572,6 @@ WStringStruct& WStringStruct::operator =(
 {
 
     m_my_wstring = std::move(x.m_my_wstring);
-
     return *this;
 }
 
@@ -1477,6 +1586,19 @@ bool WStringStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void WStringStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void WStringStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_wstring
@@ -1545,7 +1667,6 @@ LargeWStringStruct& LargeWStringStruct::operator =(
 {
 
     m_my_large_wstring = x.m_my_large_wstring;
-
     return *this;
 }
 
@@ -1554,7 +1675,6 @@ LargeWStringStruct& LargeWStringStruct::operator =(
 {
 
     m_my_large_wstring = std::move(x.m_my_large_wstring);
-
     return *this;
 }
 
@@ -1569,6 +1689,19 @@ bool LargeWStringStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void LargeWStringStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void LargeWStringStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_large_wstring
@@ -1637,7 +1770,6 @@ ArrayStruct& ArrayStruct::operator =(
 {
 
     m_my_array = x.m_my_array;
-
     return *this;
 }
 
@@ -1646,7 +1778,6 @@ ArrayStruct& ArrayStruct::operator =(
 {
 
     m_my_array = std::move(x.m_my_array);
-
     return *this;
 }
 
@@ -1661,6 +1792,19 @@ bool ArrayStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void ArrayStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void ArrayStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_array
@@ -1729,7 +1873,6 @@ ArrayStructEqual& ArrayStructEqual::operator =(
 {
 
     m_my_array_equal = x.m_my_array_equal;
-
     return *this;
 }
 
@@ -1738,7 +1881,6 @@ ArrayStructEqual& ArrayStructEqual::operator =(
 {
 
     m_my_array_equal = std::move(x.m_my_array_equal);
-
     return *this;
 }
 
@@ -1753,6 +1895,19 @@ bool ArrayStructEqual::operator !=(
 {
     return !(*this == x);
 }
+
+void ArrayStructEqual::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void ArrayStructEqual::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_array_equal
@@ -1821,7 +1976,6 @@ ArrayBadStruct& ArrayBadStruct::operator =(
 {
 
     m_my_array = x.m_my_array;
-
     return *this;
 }
 
@@ -1830,7 +1984,6 @@ ArrayBadStruct& ArrayBadStruct::operator =(
 {
 
     m_my_array = std::move(x.m_my_array);
-
     return *this;
 }
 
@@ -1845,6 +1998,19 @@ bool ArrayBadStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void ArrayBadStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void ArrayBadStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_array
@@ -1913,7 +2079,6 @@ ArrayDimensionsStruct& ArrayDimensionsStruct::operator =(
 {
 
     m_my_array = x.m_my_array;
-
     return *this;
 }
 
@@ -1922,7 +2087,6 @@ ArrayDimensionsStruct& ArrayDimensionsStruct::operator =(
 {
 
     m_my_array = std::move(x.m_my_array);
-
     return *this;
 }
 
@@ -1937,6 +2101,19 @@ bool ArrayDimensionsStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void ArrayDimensionsStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void ArrayDimensionsStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_array
@@ -2005,7 +2182,6 @@ ArraySizeStruct& ArraySizeStruct::operator =(
 {
 
     m_my_array = x.m_my_array;
-
     return *this;
 }
 
@@ -2014,7 +2190,6 @@ ArraySizeStruct& ArraySizeStruct::operator =(
 {
 
     m_my_array = std::move(x.m_my_array);
-
     return *this;
 }
 
@@ -2029,6 +2204,19 @@ bool ArraySizeStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void ArraySizeStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void ArraySizeStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_array
@@ -2097,7 +2285,6 @@ SequenceStruct& SequenceStruct::operator =(
 {
 
     m_my_sequence = x.m_my_sequence;
-
     return *this;
 }
 
@@ -2106,7 +2293,6 @@ SequenceStruct& SequenceStruct::operator =(
 {
 
     m_my_sequence = std::move(x.m_my_sequence);
-
     return *this;
 }
 
@@ -2121,6 +2307,19 @@ bool SequenceStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SequenceStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SequenceStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_sequence
@@ -2189,7 +2388,6 @@ SequenceStructEqual& SequenceStructEqual::operator =(
 {
 
     m_my_sequence_equal = x.m_my_sequence_equal;
-
     return *this;
 }
 
@@ -2198,7 +2396,6 @@ SequenceStructEqual& SequenceStructEqual::operator =(
 {
 
     m_my_sequence_equal = std::move(x.m_my_sequence_equal);
-
     return *this;
 }
 
@@ -2213,6 +2410,19 @@ bool SequenceStructEqual::operator !=(
 {
     return !(*this == x);
 }
+
+void SequenceStructEqual::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SequenceStructEqual::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_sequence_equal
@@ -2281,7 +2491,6 @@ SequenceBadStruct& SequenceBadStruct::operator =(
 {
 
     m_my_sequence = x.m_my_sequence;
-
     return *this;
 }
 
@@ -2290,7 +2499,6 @@ SequenceBadStruct& SequenceBadStruct::operator =(
 {
 
     m_my_sequence = std::move(x.m_my_sequence);
-
     return *this;
 }
 
@@ -2305,6 +2513,19 @@ bool SequenceBadStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SequenceBadStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SequenceBadStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_sequence
@@ -2373,7 +2594,6 @@ SequenceBoundsStruct& SequenceBoundsStruct::operator =(
 {
 
     m_my_sequence = x.m_my_sequence;
-
     return *this;
 }
 
@@ -2382,7 +2602,6 @@ SequenceBoundsStruct& SequenceBoundsStruct::operator =(
 {
 
     m_my_sequence = std::move(x.m_my_sequence);
-
     return *this;
 }
 
@@ -2397,6 +2616,19 @@ bool SequenceBoundsStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SequenceBoundsStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SequenceBoundsStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_sequence
@@ -2465,7 +2697,6 @@ SequenceSequenceStruct& SequenceSequenceStruct::operator =(
 {
 
     m_my_sequence_sequence = x.m_my_sequence_sequence;
-
     return *this;
 }
 
@@ -2474,7 +2705,6 @@ SequenceSequenceStruct& SequenceSequenceStruct::operator =(
 {
 
     m_my_sequence_sequence = std::move(x.m_my_sequence_sequence);
-
     return *this;
 }
 
@@ -2489,6 +2719,19 @@ bool SequenceSequenceStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SequenceSequenceStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SequenceSequenceStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_sequence_sequence
@@ -2557,7 +2800,6 @@ SequenceSequenceBoundsStruct& SequenceSequenceBoundsStruct::operator =(
 {
 
     m_my_sequence_sequence = x.m_my_sequence_sequence;
-
     return *this;
 }
 
@@ -2566,7 +2808,6 @@ SequenceSequenceBoundsStruct& SequenceSequenceBoundsStruct::operator =(
 {
 
     m_my_sequence_sequence = std::move(x.m_my_sequence_sequence);
-
     return *this;
 }
 
@@ -2581,6 +2822,19 @@ bool SequenceSequenceBoundsStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SequenceSequenceBoundsStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SequenceSequenceBoundsStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_sequence_sequence
@@ -2649,7 +2903,6 @@ MapStruct& MapStruct::operator =(
 {
 
     m_my_map = x.m_my_map;
-
     return *this;
 }
 
@@ -2658,7 +2911,6 @@ MapStruct& MapStruct::operator =(
 {
 
     m_my_map = std::move(x.m_my_map);
-
     return *this;
 }
 
@@ -2673,6 +2925,19 @@ bool MapStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MapStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map
@@ -2741,7 +3006,6 @@ MapStructEqual& MapStructEqual::operator =(
 {
 
     m_my_map_equal = x.m_my_map_equal;
-
     return *this;
 }
 
@@ -2750,7 +3014,6 @@ MapStructEqual& MapStructEqual::operator =(
 {
 
     m_my_map_equal = std::move(x.m_my_map_equal);
-
     return *this;
 }
 
@@ -2765,6 +3028,19 @@ bool MapStructEqual::operator !=(
 {
     return !(*this == x);
 }
+
+void MapStructEqual::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapStructEqual::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map_equal
@@ -2833,7 +3109,6 @@ MapBadKeyStruct& MapBadKeyStruct::operator =(
 {
 
     m_my_map = x.m_my_map;
-
     return *this;
 }
 
@@ -2842,7 +3117,6 @@ MapBadKeyStruct& MapBadKeyStruct::operator =(
 {
 
     m_my_map = std::move(x.m_my_map);
-
     return *this;
 }
 
@@ -2857,6 +3131,19 @@ bool MapBadKeyStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MapBadKeyStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapBadKeyStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map
@@ -2925,7 +3212,6 @@ MapBadElemStruct& MapBadElemStruct::operator =(
 {
 
     m_my_map = x.m_my_map;
-
     return *this;
 }
 
@@ -2934,7 +3220,6 @@ MapBadElemStruct& MapBadElemStruct::operator =(
 {
 
     m_my_map = std::move(x.m_my_map);
-
     return *this;
 }
 
@@ -2949,6 +3234,19 @@ bool MapBadElemStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MapBadElemStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapBadElemStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map
@@ -3017,7 +3315,6 @@ MapBoundsStruct& MapBoundsStruct::operator =(
 {
 
     m_my_map = x.m_my_map;
-
     return *this;
 }
 
@@ -3026,7 +3323,6 @@ MapBoundsStruct& MapBoundsStruct::operator =(
 {
 
     m_my_map = std::move(x.m_my_map);
-
     return *this;
 }
 
@@ -3041,6 +3337,19 @@ bool MapBoundsStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MapBoundsStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapBoundsStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map
@@ -3109,7 +3418,6 @@ MapMapStruct& MapMapStruct::operator =(
 {
 
     m_my_map_map = x.m_my_map_map;
-
     return *this;
 }
 
@@ -3118,7 +3426,6 @@ MapMapStruct& MapMapStruct::operator =(
 {
 
     m_my_map_map = std::move(x.m_my_map_map);
-
     return *this;
 }
 
@@ -3133,6 +3440,19 @@ bool MapMapStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MapMapStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapMapStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map_map
@@ -3201,7 +3521,6 @@ MapMapBoundsStruct& MapMapBoundsStruct::operator =(
 {
 
     m_my_map_map = x.m_my_map_map;
-
     return *this;
 }
 
@@ -3210,7 +3529,6 @@ MapMapBoundsStruct& MapMapBoundsStruct::operator =(
 {
 
     m_my_map_map = std::move(x.m_my_map_map);
-
     return *this;
 }
 
@@ -3225,6 +3543,19 @@ bool MapMapBoundsStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void MapMapBoundsStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void MapMapBoundsStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_map_map
@@ -3423,6 +3754,8 @@ void SimpleUnion::_d(
             }
             break;
 
+        default:
+            break;
     }
 
     if (!b)
@@ -3543,6 +3876,20 @@ int64_t& SimpleUnion::second()
 
     return m_second;
 }
+
+
+void SimpleUnion::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleUnion::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 
 SimpleUnionNames::SimpleUnionNames()
@@ -3703,6 +4050,8 @@ void SimpleUnionNames::_d(
             }
             break;
 
+        default:
+            break;
     }
 
     if (!b)
@@ -3823,6 +4172,20 @@ int64_t& SimpleUnionNames::second_case()
 
     return m_second_case;
 }
+
+
+void SimpleUnionNames::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleUnionNames::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 
 SimpleTypeUnion::SimpleTypeUnion()
@@ -3983,6 +4346,8 @@ void SimpleTypeUnion::_d(
             }
             break;
 
+        default:
+            break;
     }
 
     if (!b)
@@ -4103,6 +4468,20 @@ int64_t& SimpleTypeUnion::second()
 
     return m_second;
 }
+
+
+void SimpleTypeUnion::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleTypeUnion::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 
 SimpleBadUnion::SimpleBadUnion()
@@ -4263,6 +4642,8 @@ void SimpleBadUnion::_d(
             }
             break;
 
+        default:
+            break;
     }
 
     if (!b)
@@ -4383,6 +4764,20 @@ int64_t& SimpleBadUnion::second()
 
     return m_second;
 }
+
+
+void SimpleBadUnion::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleBadUnion::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 
 SimpleBadDiscUnion::SimpleBadDiscUnion()
@@ -4543,6 +4938,8 @@ void SimpleBadDiscUnion::_d(
             }
             break;
 
+        default:
+            break;
     }
 
     if (!b)
@@ -4665,6 +5062,20 @@ int64_t& SimpleBadDiscUnion::second()
 }
 
 
+void SimpleBadDiscUnion::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleBadDiscUnion::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
+
+
 SimpleUnionStruct::SimpleUnionStruct()
 {
 
@@ -4693,7 +5104,6 @@ SimpleUnionStruct& SimpleUnionStruct::operator =(
 {
 
     m_my_union = x.m_my_union;
-
     return *this;
 }
 
@@ -4702,7 +5112,6 @@ SimpleUnionStruct& SimpleUnionStruct::operator =(
 {
 
     m_my_union = std::move(x.m_my_union);
-
     return *this;
 }
 
@@ -4717,6 +5126,19 @@ bool SimpleUnionStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SimpleUnionStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleUnionStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_union
@@ -4785,7 +5207,6 @@ SimpleUnionStructEqual& SimpleUnionStructEqual::operator =(
 {
 
     m_my_union_equal = x.m_my_union_equal;
-
     return *this;
 }
 
@@ -4794,7 +5215,6 @@ SimpleUnionStructEqual& SimpleUnionStructEqual::operator =(
 {
 
     m_my_union_equal = std::move(x.m_my_union_equal);
-
     return *this;
 }
 
@@ -4809,6 +5229,19 @@ bool SimpleUnionStructEqual::operator !=(
 {
     return !(*this == x);
 }
+
+void SimpleUnionStructEqual::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleUnionStructEqual::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_union_equal
@@ -4877,7 +5310,6 @@ SimpleUnionNamesStruct& SimpleUnionNamesStruct::operator =(
 {
 
     m_my_union = x.m_my_union;
-
     return *this;
 }
 
@@ -4886,7 +5318,6 @@ SimpleUnionNamesStruct& SimpleUnionNamesStruct::operator =(
 {
 
     m_my_union = std::move(x.m_my_union);
-
     return *this;
 }
 
@@ -4901,6 +5332,19 @@ bool SimpleUnionNamesStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SimpleUnionNamesStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleUnionNamesStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_union
@@ -4969,7 +5413,6 @@ SimpleTypeUnionStruct& SimpleTypeUnionStruct::operator =(
 {
 
     m_my_union = x.m_my_union;
-
     return *this;
 }
 
@@ -4978,7 +5421,6 @@ SimpleTypeUnionStruct& SimpleTypeUnionStruct::operator =(
 {
 
     m_my_union = std::move(x.m_my_union);
-
     return *this;
 }
 
@@ -4993,6 +5435,19 @@ bool SimpleTypeUnionStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SimpleTypeUnionStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleTypeUnionStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_union
@@ -5061,7 +5516,6 @@ SimpleBadUnionStruct& SimpleBadUnionStruct::operator =(
 {
 
     m_my_union = x.m_my_union;
-
     return *this;
 }
 
@@ -5070,7 +5524,6 @@ SimpleBadUnionStruct& SimpleBadUnionStruct::operator =(
 {
 
     m_my_union = std::move(x.m_my_union);
-
     return *this;
 }
 
@@ -5085,6 +5538,19 @@ bool SimpleBadUnionStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SimpleBadUnionStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimpleBadUnionStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_union
@@ -5153,7 +5619,6 @@ SimplBadDiscUnionStruct& SimplBadDiscUnionStruct::operator =(
 {
 
     m_my_union = x.m_my_union;
-
     return *this;
 }
 
@@ -5162,7 +5627,6 @@ SimplBadDiscUnionStruct& SimplBadDiscUnionStruct::operator =(
 {
 
     m_my_union = std::move(x.m_my_union);
-
     return *this;
 }
 
@@ -5177,6 +5641,19 @@ bool SimplBadDiscUnionStruct::operator !=(
 {
     return !(*this == x);
 }
+
+void SimplBadDiscUnionStruct::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void SimplBadDiscUnionStruct::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member my_union
@@ -5216,6 +5693,3 @@ SimpleBadDiscUnion& SimplBadDiscUnionStruct::my_union()
     return m_my_union;
 }
 
-
-// Include auxiliary functions like for serializing/deserializing.
-#include "TypesCdrAux.ipp"

@@ -273,3 +273,4 @@ eProsima_user_DllExport void serialize_key(
 } // namespace eprosima
 
 #endif // _FAST_DDS_GENERATED_BASICCDRAUX_HPP_
+

@@ -27,13 +27,14 @@ char dummy;
 #endif  // _WIN32
 
 #include "AllocTestType.h"
-#include <fastcdr/Cdr.h>
-
-
-#include <fastcdr/exceptions/BadParamException.h>
-using namespace eprosima::fastcdr::exception;
+#include <fastdds/rtps/common/CdrSerialization.hpp>
 
 #include <utility>
+
+// Include auxiliary functions like for serializing/deserializing.
+#include "AllocTestTypeCdrAux.ipp"
+
+using namespace eprosima::fastcdr::exception;
 
 
 AllocTestType::AllocTestType()
@@ -62,7 +63,6 @@ AllocTestType& AllocTestType::operator =(
 {
 
     m_index = x.m_index;
-
     return *this;
 }
 
@@ -71,7 +71,6 @@ AllocTestType& AllocTestType::operator =(
 {
 
     m_index = x.m_index;
-
     return *this;
 }
 
@@ -86,6 +85,19 @@ bool AllocTestType::operator !=(
 {
     return !(*this == x);
 }
+
+void AllocTestType::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void AllocTestType::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function sets a value in member index
@@ -115,6 +127,3 @@ uint32_t& AllocTestType::index()
     return m_index;
 }
 
-
-// Include auxiliary functions like for serializing/deserializing.
-#include "AllocTestTypeCdrAux.ipp"

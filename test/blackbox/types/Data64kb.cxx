@@ -27,13 +27,14 @@ char dummy;
 #endif  // _WIN32
 
 #include "Data64kb.h"
-#include <fastcdr/Cdr.h>
-
-
-#include <fastcdr/exceptions/BadParamException.h>
-using namespace eprosima::fastcdr::exception;
+#include <fastdds/rtps/common/CdrSerialization.hpp>
 
 #include <utility>
+
+// Include auxiliary functions like for serializing/deserializing.
+#include "Data64kbCdrAux.ipp"
+
+using namespace eprosima::fastcdr::exception;
 
 
 Data64kb::Data64kb()
@@ -62,7 +63,6 @@ Data64kb& Data64kb::operator =(
 {
 
     m_data = x.m_data;
-
     return *this;
 }
 
@@ -71,7 +71,6 @@ Data64kb& Data64kb::operator =(
 {
 
     m_data = std::move(x.m_data);
-
     return *this;
 }
 
@@ -86,6 +85,19 @@ bool Data64kb::operator !=(
 {
     return !(*this == x);
 }
+
+void Data64kb::serialize(
+        eprosima::fastcdr::Cdr& scdr) const
+{
+    eprosima::fastcdr::serialize(scdr, *this);
+}
+
+void Data64kb::deserialize(
+        eprosima::fastcdr::Cdr& dcdr)
+{
+    eprosima::fastcdr::deserialize(dcdr, *this);
+}
+
 
 /*!
  * @brief This function copies the value in member data
@@ -125,6 +137,3 @@ std::vector<uint8_t>& Data64kb::data()
     return m_data;
 }
 
-
-// Include auxiliary functions like for serializing/deserializing.
-#include "Data64kbCdrAux.ipp"
