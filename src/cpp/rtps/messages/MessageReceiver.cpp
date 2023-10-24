@@ -704,7 +704,7 @@ void MessageReceiver::findAllReaders(
 bool MessageReceiver::proc_Submsg_Data(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -860,7 +860,7 @@ bool MessageReceiver::proc_Submsg_Data(
             associated_readers_.size());
 
     //Look for the correct reader to add the change
-    process_data_message_function_(readerID, ch, current_message_was_decoded);
+    process_data_message_function_(readerID, ch, was_decoded);
 
     IPayloadPool* payload_pool = ch.payload_owner();
     if (payload_pool)
@@ -879,7 +879,7 @@ bool MessageReceiver::proc_Submsg_Data(
 bool MessageReceiver::proc_Submsg_DataFrag(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1044,7 +1044,7 @@ bool MessageReceiver::proc_Submsg_DataFrag(
     logInfo(RTPS_MSG_IN, IDSTRING "from Writer " << ch.writerGUID << "; possible RTPSReader entities: " <<
             associated_readers_.size());
     process_data_fragment_message_function_(readerID, ch, sampleSize, fragmentStartingNum, fragmentsInSubmessage,
-            current_message_was_decoded);
+            was_decoded);
     ch.serializedPayload.data = nullptr;
     ch.inline_qos.data = nullptr;
 
@@ -1056,7 +1056,7 @@ bool MessageReceiver::proc_Submsg_DataFrag(
 bool MessageReceiver::proc_Submsg_Heartbeat(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1116,7 +1116,7 @@ bool MessageReceiver::proc_Submsg_Heartbeat(
 bool MessageReceiver::proc_Submsg_Acknack(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1167,7 +1167,7 @@ bool MessageReceiver::proc_Submsg_Acknack(
 bool MessageReceiver::proc_Submsg_Gap(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1296,7 +1296,7 @@ bool MessageReceiver::proc_Submsg_InfoSRC(
 bool MessageReceiver::proc_Submsg_NackFrag(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1352,7 +1352,7 @@ bool MessageReceiver::proc_Submsg_NackFrag(
 bool MessageReceiver::proc_Submsg_HeartbeatFrag(
         CDRMessage_t* msg,
         SubmessageHeader_t* smh,
-        bool current_message_was_decoded) const
+        bool was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 

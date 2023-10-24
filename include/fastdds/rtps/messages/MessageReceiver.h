@@ -157,10 +157,9 @@ private:
      * -Modify the message receiver state if necessary.
      * -Add information to the history.
      * -Return an error if the message is malformed.
-     * @param[in,out] msg                      Pointer to the message
-     * @param[in] smh                          Pointer to the submessage header
-     * @param[in] current_message_was_decoded  Whether the submessage being processed came from decoding a secured
-     *                                         submessage
+     * @param[in,out] msg      Pointer to the message
+     * @param[in] smh          Pointer to the submessage header
+     * @param[in] was_decoded  Whether the submessage being processed came from decoding a secured submessage
      * @return True if correct, false otherwise
      */
 
@@ -169,29 +168,29 @@ private:
      *
      * @param msg
      * @param smh
-     * @param current_message_was_decoded
+     * @param was_decoded
      * @return
      */
     bool proc_Submsg_Data(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     bool proc_Submsg_DataFrag(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     bool proc_Submsg_Heartbeat(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     bool proc_Submsg_Acknack(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     bool proc_Submsg_Gap(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     bool proc_Submsg_InfoTS(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh);
@@ -204,11 +203,11 @@ private:
     bool proc_Submsg_NackFrag(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     bool proc_Submsg_HeartbeatFrag(
             CDRMessage_t* msg,
             SubmessageHeader_t* smh,
-            bool current_message_was_decoded) const;
+            bool was_decoded) const;
     ///@}
 
 
