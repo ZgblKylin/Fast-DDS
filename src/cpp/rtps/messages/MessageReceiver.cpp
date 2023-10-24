@@ -379,6 +379,8 @@ void MessageReceiver::processCDRMsg(
     {
         CDRMessage_t* submessage = msg;
 
+        bool current_message_was_decoded = false;
+
 #if HAVE_SECURITY
         decode_ret = security.decode_rtps_submessage(*msg, *auxiliary_buffer, source_guid_prefix_);
 
@@ -389,6 +391,7 @@ void MessageReceiver::processCDRMsg(
 
         if (decode_ret == 0)
         {
+            current_message_was_decoded = true;
             submessage = auxiliary_buffer;
         }
 #endif // if HAVE_SECURITY
@@ -413,7 +416,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "Data Submsg received, processing.");
-                    valid = proc_Submsg_Data(submessage, &submsgh);
+                    valid = proc_Submsg_Data(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             }
@@ -425,7 +428,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "DataFrag Submsg received, processing.");
-                    valid = proc_Submsg_DataFrag(submessage, &submsgh);
+                    valid = proc_Submsg_DataFrag(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             case GAP:
@@ -437,7 +440,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "Gap Submsg received, processing...");
-                    valid = proc_Submsg_Gap(submessage, &submsgh);
+                    valid = proc_Submsg_Gap(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             }
@@ -450,7 +453,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "Acknack Submsg received, processing...");
-                    valid = proc_Submsg_Acknack(submessage, &submsgh);
+                    valid = proc_Submsg_Acknack(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             }
@@ -463,7 +466,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "NackFrag Submsg received, processing...");
-                    valid = proc_Submsg_NackFrag(submessage, &submsgh);
+                    valid = proc_Submsg_NackFrag(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             }
@@ -476,7 +479,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "Heartbeat Submsg received, processing...");
-                    valid = proc_Submsg_Heartbeat(submessage, &submsgh);
+                    valid = proc_Submsg_Heartbeat(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             }
@@ -489,7 +492,7 @@ void MessageReceiver::processCDRMsg(
                 else
                 {
                     logInfo(RTPS_MSG_IN, IDSTRING "HeartbeatFrag Submsg received, processing...");
-                    valid = proc_Submsg_HeartbeatFrag(submessage, &submsgh);
+                    valid = proc_Submsg_HeartbeatFrag(submessage, &submsgh, current_message_was_decoded);
                 }
                 break;
             }
@@ -682,7 +685,8 @@ void MessageReceiver::findAllReaders(
 
 bool MessageReceiver::proc_Submsg_Data(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -856,7 +860,8 @@ bool MessageReceiver::proc_Submsg_Data(
 
 bool MessageReceiver::proc_Submsg_DataFrag(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1031,7 +1036,8 @@ bool MessageReceiver::proc_Submsg_DataFrag(
 
 bool MessageReceiver::proc_Submsg_Heartbeat(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1090,7 +1096,8 @@ bool MessageReceiver::proc_Submsg_Heartbeat(
 
 bool MessageReceiver::proc_Submsg_Acknack(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1140,7 +1147,8 @@ bool MessageReceiver::proc_Submsg_Acknack(
 
 bool MessageReceiver::proc_Submsg_Gap(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1268,7 +1276,8 @@ bool MessageReceiver::proc_Submsg_InfoSRC(
 
 bool MessageReceiver::proc_Submsg_NackFrag(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
@@ -1323,7 +1332,8 @@ bool MessageReceiver::proc_Submsg_NackFrag(
 
 bool MessageReceiver::proc_Submsg_HeartbeatFrag(
         CDRMessage_t* msg,
-        SubmessageHeader_t* smh) const
+        SubmessageHeader_t* smh,
+        bool current_message_was_decoded) const
 {
     eprosima::shared_lock<eprosima::shared_mutex> guard(mtx_);
 
