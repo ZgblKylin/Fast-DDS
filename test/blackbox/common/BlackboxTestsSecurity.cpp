@@ -3271,13 +3271,13 @@ TEST_F(SecurityPkcs, BuiltinAuthenticationAndAccessAndCryptoPlugin_pkcs11_key)
     }
 }
 
-static void BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation_ok_common(
+static void CommonPermissionsConfigure(
         PubSubReader<HelloWorldPubSubType>& reader,
         PubSubWriter<HelloWorldPubSubType>& writer,
-        const std::string& governance_file)
+        const std::string& governance_file,
+        const std::string& permissions_file)
 {
-    PropertyPolicy pub_property_policy, sub_property_policy;
-
+    PropertyPolicy sub_property_policy;
     sub_property_policy.properties().emplace_back(Property("dds.sec.auth.plugin",
             "builtin.PKI-DH"));
     sub_property_policy.properties().emplace_back(Property("dds.sec.auth.builtin.PKI-DH.identity_ca",
@@ -3295,14 +3295,10 @@ static void BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation
     sub_property_policy.properties().emplace_back(Property("dds.sec.access.builtin.Access-Permissions.governance",
             "file://" + std::string(certs_path) + "/" + governance_file));
     sub_property_policy.properties().emplace_back(Property("dds.sec.access.builtin.Access-Permissions.permissions",
-            "file://" + std::string(certs_path) + "/permissions.smime"));
+            "file://" + std::string(certs_path) + "/" + permissions_file));
+    reader.property_policy(sub_property_policy);
 
-    reader.history_depth(10).
-            reliability(eprosima::fastrtps::RELIABLE_RELIABILITY_QOS).
-            property_policy(sub_property_policy).init();
-
-    ASSERT_TRUE(reader.isInitialized());
-
+    PropertyPolicy pub_property_policy;
     pub_property_policy.properties().emplace_back(Property("dds.sec.auth.plugin",
             "builtin.PKI-DH"));
     pub_property_policy.properties().emplace_back(Property("dds.sec.auth.builtin.PKI-DH.identity_ca",
@@ -3320,11 +3316,21 @@ static void BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation
     pub_property_policy.properties().emplace_back(Property("dds.sec.access.builtin.Access-Permissions.governance",
             "file://" + std::string(certs_path) + "/" + governance_file));
     pub_property_policy.properties().emplace_back(Property("dds.sec.access.builtin.Access-Permissions.permissions",
-            "file://" + std::string(certs_path) + "/permissions.smime"));
+            "file://" + std::string(certs_path) + "/" + permissions_file));
+    writer.property_policy(pub_property_policy);
+}
 
-    writer.history_depth(10).
-            property_policy(pub_property_policy).init();
+static void BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation_ok_common(
+        PubSubReader<HelloWorldPubSubType>& reader,
+        PubSubWriter<HelloWorldPubSubType>& writer,
+        const std::string& governance_file)
+{
+    CommonPermissionsConfigure(reader, writer, governance_file, "permissions.smime");
+    
+    reader.history_depth(10).reliability(eprosima::fastrtps::RELIABLE_RELIABILITY_QOS).init();
+    ASSERT_TRUE(reader.isInitialized());
 
+    writer.history_depth(10).init();
     ASSERT_TRUE(writer.isInitialized());
 
     // Wait for authorization
