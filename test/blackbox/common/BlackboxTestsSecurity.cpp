@@ -3328,7 +3328,7 @@ static void BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation
         const std::string& governance_file)
 {
     CommonPermissionsConfigure(reader, writer, governance_file, "permissions.smime");
-    
+
     reader.history_depth(10).reliability(eprosima::fastrtps::RELIABLE_RELIABILITY_QOS).init();
     ASSERT_TRUE(reader.isInitialized());
 
@@ -4389,32 +4389,32 @@ TEST(Security, MaliciousHeartbeatIgnore)
 
     struct MaliciousHeartbeat
     {
-        std::array<char, 4>    rtps_id{{'R', 'T', 'P', 'S'}};
+        std::array<char, 4> rtps_id{{'R', 'T', 'P', 'S'}};
         std::array<uint8_t, 2> protocol_version{{2, 3}};
         std::array<uint8_t, 2> vendor_id{{0x01, 0x0F}};
-        GuidPrefix_t           sender_prefix;
+        GuidPrefix_t sender_prefix;
 
-        uint8_t                submessage_id = 0x07;
+        uint8_t submessage_id = 0x07;
 #if FASTDDS_IS_BIG_ENDIAN_TARGET
-        uint8_t                flags = 0;
+        uint8_t flags = 0;
 #else
-        uint8_t                flags = 0x01;
+        uint8_t flags = 0x01;
 #endif  // FASTDDS_IS_BIG_ENDIAN_TARGET
-        uint16_t               submessage_length = 4 + 4 + 8 + 8 + 4;
-        EntityId_t             reader_id{};
-        EntityId_t             writer_id{};
-        SequenceNumber_t       first_sn{};
-        SequenceNumber_t       last_sn{};
-        int32_t                count = 0;
+        uint16_t submessage_length = 4 + 4 + 8 + 8 + 4;
+        EntityId_t reader_id{};
+        EntityId_t writer_id{};
+        SequenceNumber_t first_sn{};
+        SequenceNumber_t last_sn{};
+        int32_t count = 0;
     };
 
     // Set custom transport on both participants
     auto transport = std::make_shared<test_UDPv4TransportDescriptor>();
     std::atomic<bool> avoid_sec_submessages{false};
     transport->sub_messages_filter_ = [&avoid_sec_submessages](CDRMessage_t& msg) -> bool
-    {
-        return avoid_sec_submessages.load() && (0x30 == (msg.buffer[msg.pos] & 0xF0));
-    };
+            {
+                return avoid_sec_submessages.load() && (0x30 == (msg.buffer[msg.pos] & 0xF0));
+            };
 
     struct FakeMsg
     {
@@ -4428,8 +4428,9 @@ TEST(Security, MaliciousHeartbeatIgnore)
             socket.open(asio::ip::udp::v4());
         }
 
-        void send(const CDRMessage_t& msg,
-                  const Locator_t& destination)
+        void send(
+                const CDRMessage_t& msg,
+                const Locator_t& destination)
         {
             std::string addr = IPLocator::toIPv4string(destination);
             unsigned short port = static_cast<unsigned short>(destination.port);
@@ -4438,6 +4439,7 @@ TEST(Security, MaliciousHeartbeatIgnore)
 
             socket.send_to(asio::buffer(msg.buffer, msg.length), remote, 0, ec);
         }
+
     };
     FakeMsg fake_msg;
 
