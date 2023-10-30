@@ -51,7 +51,7 @@ if(MSVC OR MSVC_IDE)
         iphlpapi Shlwapi
         )
 endif()
-add_gtest(FlowControllerFactoryTests SOURCES ${FLOWCONTROLLERFACTORYTESTS_SOURCE})
+gtest_discover_tests(FlowControllerFactoryTests)
 
 set(FLOWCONTROLLERPUBLISHMODESTESTS_SOURCE
     ${FLOWCONTROLLER_COMMON_SOURCE}
@@ -79,7 +79,7 @@ if(MSVC OR MSVC_IDE)
         iphlpapi Shlwapi
         )
 endif()
-add_gtest(FlowControllerPublishModesTests SOURCES ${FLOWCONTROLLERPUBLISHMODESTESTS_SOURCE})
+gtest_discover_tests(FlowControllerPublishModesTests)
 
 set(FLOWCONTROLLERSCHEDULERSTESTS_SOURCE
     ${FLOWCONTROLLER_COMMON_SOURCE}
@@ -103,7 +103,7 @@ if(MSVC OR MSVC_IDE)
         iphlpapi Shlwapi
         )
 endif()
-add_gtest(FlowControllerSchedulersTests SOURCES ${FLOWCONTROLLERSCHEDULERSTESTS_SOURCE})
+gtest_discover_tests(FlowControllerSchedulersTests)
 
 if(ANDROID)
     set_property(TARGET FlowControllerFactoryTests PROPERTY CROSSCOMPILING_EMULATOR "adb;shell;cd;${CMAKE_CURRENT_BINARY_DIR};&&")
