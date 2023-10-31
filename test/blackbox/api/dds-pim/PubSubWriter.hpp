@@ -1586,6 +1586,18 @@ public:
         return *this;
     }
 
+    PubSubWriter& data_representation(
+            const std::vector<eprosima::fastdds::dds::DataRepresentationId_t>& values)
+    {
+        datawriter_qos_.representation().m_value = values;
+        return *this;
+    }
+
+    eprosima::fastdds::dds::TypeSupport get_type_support()
+    {
+        return type_;
+    }
+
 protected:
 
     void participant_matched()

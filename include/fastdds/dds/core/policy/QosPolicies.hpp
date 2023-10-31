@@ -2100,7 +2100,7 @@ public:
      */
     RTPS_DllAPI DataRepresentationQosPolicy()
         : Parameter_t(PID_DATA_REPRESENTATION, 0)
-        , QosPolicy(true)
+        , QosPolicy(false)
     {
     }
 
