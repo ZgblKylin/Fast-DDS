@@ -4479,12 +4479,11 @@ TEST(Security, MaliciousHeartbeatIgnore)
     // Send malicious heartbeat
     {
         auto writer_guid = writer.datawriter_guid();
-        auto reader_guid = reader.datareader_guid();
 
         MaliciousHeartbeat hb{};
         hb.sender_prefix = writer_guid.guidPrefix;
         hb.writer_id = writer_guid.entityId;
-        hb.reader_id = reader_guid.entityId;
+        hb.reader_id = EntityId_t::unknown();
         hb.first_sn.low = 100;
         hb.last_sn.low = 100;
         hb.count = 100;
